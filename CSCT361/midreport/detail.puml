@@ -1,4 +1,4 @@
-
+@startuml
 Pellet <|-- NormalPellet
 Pellet <|-- PowerPellet
 Map "1"*--"1" NormalPellet
@@ -33,3 +33,4 @@ class Map{
     +void setPowerPellet(int x, int y, boolean isPowerPellet)
 
 }
+@enduml
