@@ -1,0 +1,35 @@
+
+Pellet <|-- NormalPellet
+Pellet <|-- PowerPellet
+Map "1"*--"1" NormalPellet
+Map "1"*--"1" PowerPellet
+
+class Pellet {
+    - boolean[N][N] pellets
+    + boolean isObject(int x, int y)
+    + void setObject(int x, int y, boolean isObject)
+}
+
+
+class NormalPellet{
+    +boolean isWin()
+}
+
+class PowerPellet{
+}
+
+class Map{
+    -Wall wall
+    -NormalPellet pellet
+    -PowerPellet powerPellet
+    -Ghosts[] ghosts
+    +boolean isWall(int x, int y)
+    +boolean isPellet(int x, int y)
+    +boolean isPowerPellet(int x, int y)
+    +boolean isGhost(int x,int y)
+    +boolean isWin()
+    +void setWall(int x, int y, boolean isWall)
+    +void setPellet(int x, int y, boolean isPellet)
+    +void setPowerPellet(int x, int y, boolean isPowerPellet)
+
+}

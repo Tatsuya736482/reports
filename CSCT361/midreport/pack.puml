@@ -1,4 +1,40 @@
-@startuml
+@startuml pacman
+class Game{
+    -Packman packman
+    -Map map
+    -Timer timer
+    -int score
+    -int level
+    + void init()
+    + void movePackman(int x, int y)
+    + void isWall(int x, int y)
+    + void triggerGhost()
+    + void triggerEatGhost()
+    + void triggerTimeOut()
+    + void triggerMoveGhost()
+    + void moveGhosts()
+    + boolean isWin()
+    + boolean isLose()
+    + boolean isGhost(int x, int y)
+    + dict getInfo()
+    + void addScore(int num)
+    + void initGame(Ghosts ghosts, Map map, Timer timer,int level,...)
+}
+
+abstract class Ghost {
+    - String name
+    - String color
+    - String direction
+    - int x
+    - int y
+    - String state
+    - int wait
+    - int speed
+    + void changeDirection(String direction)
+    + void encounter(Object object)
+    + boolean isGhost(int x, int y)
+    +<< abstract>> String chase()
+}
 
 class Pacman {
     - int initX = 0
@@ -27,20 +63,6 @@ class Pacman {
 }
 
 
-abstract class Ghost {
-    - String name
-    - String color
-    - String direction
-    - int x
-    - int y
-    - String state
-    - int wait
-    - int speed
-    + void changeDirection(String direction)
-    + void encounter(Object object)
-    + boolean isGhost(int x, int y)
-    +<< abstract>> String chase()
-}
 
 class GhostRandom{
     +name = "Random"
@@ -52,6 +74,12 @@ class GhostSmart{
     +int name = "Smart"
     +int color = "Red"
     +String chase() = chaseSmart()
+}
+
+class GhostAgressive{
+    +int name = "Agressive"
+    +int color = "Green"
+    +String chase() = chaseAgressive()
 }
 
 interface GameObject {
@@ -120,47 +148,25 @@ class Ghosts{
 }
 
 
-
-class Game{
-    -Packman packman
-    -Map map
-    -Timer timer
-    -int score
-    -int level
-    + void init()
-    + void movePackman(int x, int y)
-    + void isWall(int x, int y)
-    + void triggerGhost()
-    + void triggerEatGhost()
-    + void triggerTimeOut()
-    + void triggerMoveGhost()
-    + void moveGhosts()
-    + boolean isWin()
-    + boolean isLose()
-    + boolean isGhost(int x, int y)
-    + dict getInfo()
-    + void addScore(int num)
-    + void initGame(Ghosts ghosts, Map map, Timer timer,int level)
-}
-
 class Keyboard{
     +keyPressed(KeyEvent e)
 }
 
+Pellet <|-- NormalPellet
+Pellet <|-- PowerPellet
+Map "1"*--"1" NormalPellet
+Map "1"*--"1" PowerPellet
 Game "1"*--"1" Pacman 
 Game "1"*--"1" Map
 Game "1"*--"1" Timer
 Ghosts "1"*--"0..*" GhostSmart
 Ghosts "1"*--"0..*" GhostRandom
+Ghosts "1"*--"0..*" GhostAgressive
 Map "1"*--"1" Wall
-Map "1"*--"1" NormalPellet
-Map "1"*--"1" PowerPellet
 Map "1"*--"1" Ghosts
 Ghost <|-- GhostRandom
 Ghost <|-- GhostSmart
-Pellet <|-- NormalPellet
-Pellet <|-- PowerPellet
-
+Ghost <|-- GhostAgressive
 GUI "1"<--"1" Game:getInfo()
 GUI "1"<--"1" Keyboard:keyPressed(KeyEvent e)
 GameObject <|.. Wall

@@ -32,6 +32,7 @@ Map -> NormalPellet: isWin()
 NormalPellet --> Map: return false
 Map --> Game: return false
 == もう１マス右に行こうとしたら壁があって動けず ==
+user -> GUI: keyPress(KeyEvent e)
 GUI -> GUI: keyPressed(KeyEvent e)
 GUI -> Game: movePackman(e.direction)
 Game -> Pacman : getX(),getY()
