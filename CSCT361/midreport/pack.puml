@@ -1,0 +1,168 @@
+@startuml
+
+class Pacman {
+    - int initX = 0
+    - int initY = 0
+    - String direction
+    - int x
+    - int y
+    - int life
+    - String state : "normal"|"power"|"init"
+    - int invincibleTime 
+    + void move(String direction)
+    + void changeDirection(String direction)
+    + int getX()
+    + int getY()
+    + int getState()
+    + void setInitX(int x)
+    + void setInitY(int y)
+    + void initX()
+    + void initY()
+    + void decreaseLife(int num)
+    + void decreaseInvincibleTime(int num)
+    + void setState(String state)
+    + void setInvincibleTime(int invincibleTime)
+    + boolean isDie()
+    + void init()
+}
+
+
+abstract class Ghost {
+    - String name
+    - String color
+    - String direction
+    - int x
+    - int y
+    - String state
+    - int wait
+    - int speed
+    + void changeDirection(String direction)
+    + void encounter(Object object)
+    + boolean isGhost(int x, int y)
+    +<< abstract>> String chase()
+}
+
+class GhostRandom{
+    +name = "Random"
+    +color = "Blue"
+    +String chase() = chaseRandom()
+}
+
+class GhostSmart{
+    +int name = "Smart"
+    +int color = "Red"
+    +String chase() = chaseSmart()
+}
+
+interface GameObject {
+    + boolean isObject(int x, int y)
+    + void setObject(int x, int y, boolean isObject)
+}
+class Wall {
+    - boolean[N][N] walls
+    + boolean isObject(int x, int y)
+    + void setObject(int x, int y, boolean isObject)
+}
+class Pellet {
+    - boolean[N][N] pellets
+    + boolean isObject(int x, int y)
+    + void setObject(int x, int y, boolean isObject)
+}
+
+
+class NormalPellet{
+    +boolean isWin()
+}
+
+class PowerPellet{
+}
+
+class GUI{
+    +drawGamePanel()
+}
+
+class Timer{
+    -int leftTime
+    -int startTime
+    -String state
+    +start()
+    +stop()
+    +int getLeftTime()
+    +int getStartTime()
+    +void setLeftTime(int leftTime)
+    +void setStartTime(int startTime)
+    +void decreaseTime(int num)
+
+}
+
+class Map{
+    -Wall wall
+    -NormalPellet pellet
+    -PowerPellet powerPellet
+    -Ghosts[] ghosts
+    +boolean isWall(int x, int y)
+    +boolean isPellet(int x, int y)
+    +boolean isPowerPellet(int x, int y)
+    +boolean isGhost(int x,int y)
+    +boolean isWin()
+    +void setWall(int x, int y, boolean isWall)
+    +void setPellet(int x, int y, boolean isPellet)
+    +void setPowerPellet(int x, int y, boolean isPowerPellet)
+
+}
+
+class Ghosts{
+    -Ghost[] ghosts
+    +void moveGhosts(Ghost ghost,Strign direction)
+    +void addGhost(Ghost ghost)
+    +void removeGhost(Ghost ghost)
+    +void isGhost(int x, int y)
+}
+
+
+
+class Game{
+    -Packman packman
+    -Map map
+    -Timer timer
+    -int score
+    -int level
+    + void init()
+    + void movePackman(int x, int y)
+    + void isWall(int x, int y)
+    + void triggerGhost()
+    + void triggerEatGhost()
+    + void triggerTimeOut()
+    + void triggerMoveGhost()
+    + void moveGhosts()
+    + boolean isWin()
+    + boolean isLose()
+    + boolean isGhost(int x, int y)
+    + dict getInfo()
+    + void addScore(int num)
+    + void initGame(Ghosts ghosts, Map map, Timer timer,int level)
+}
+
+class Keyboard{
+    +keyPressed(KeyEvent e)
+}
+
+Game "1"*--"1" Pacman 
+Game "1"*--"1" Map
+Game "1"*--"1" Timer
+Ghosts "1"*--"0..*" GhostSmart
+Ghosts "1"*--"0..*" GhostRandom
+Map "1"*--"1" Wall
+Map "1"*--"1" NormalPellet
+Map "1"*--"1" PowerPellet
+Map "1"*--"1" Ghosts
+Ghost <|-- GhostRandom
+Ghost <|-- GhostSmart
+Pellet <|-- NormalPellet
+Pellet <|-- PowerPellet
+
+GUI "1"<--"1" Game:getInfo()
+GUI "1"<--"1" Keyboard:keyPressed(KeyEvent e)
+GameObject <|.. Wall
+GameObject <|.. Pellet
+@enduml

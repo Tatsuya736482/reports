@@ -1,0 +1,51 @@
+@startuml
+autonumber
+autoactivate on
+actor user as user
+== パックマンを右に移動させエサを獲得したが， ==
+user -> GUI: keyPress(KeyEvent e)
+GUI -> GUI: keyPressed(KeyEvent e)
+GUI -> Game: movePackman(e.direction)
+Game -> Pacman : getX(),getY()
+Pacman --> Game: return x,y
+Game -> Map: isWall(x, y)
+Map -> Wall: isWall(x, y)
+Wall --> Map : return false
+Map --> Game: return false
+Game -> Pacman : changeDirection(e.direction)
+Game -> Pacman: move(e.direction)
+Game -> Pacman : getX(),getY()
+Pacman --> Game: return x,y
+Game -> Map: isPowerPellet(x, y)
+Map -> PowerPellet: isPowerPellet(x, y)
+PowerPellet --> Map: return false
+Map --> Game: return false
+Game -> Map: isPellet(x, y)
+Map -> NormalPellet: isPellet(x, y)
+NormalPellet --> Map: return true
+Map --> Game: return true
+Game -> Map: setPellet(x, y, false)
+Map -> NormalPellet: setPellet(x, y, false) 
+Game -> Game: addScore(1)
+Game -> Map: isWin()
+Map -> NormalPellet: isWin()
+NormalPellet --> Map: return false
+Map --> Game: return false
+== もう１マス右に行こうとしたら壁があって動けず ==
+GUI -> GUI: keyPressed(KeyEvent e)
+GUI -> Game: movePackman(e.direction)
+Game -> Pacman : getX(),getY()
+Pacman --> Game: return x,y
+Game -> Map: isWall(x, y)
+Map -> Wall: isWall(x, y)
+Wall --> Map : return true
+Map --> Game: return true
+== モンスターがぶつかってきてライフが1つ減ってリスタート ==
+Timer -> Game: triggerGhost()
+Game -> Pacman: decreaseLife(1)
+Game -> Pacman: isDead()
+Pacman --> Game: return false
+Game -> Pacman: setState("init")
+Game -> Pacman: initX(),initY()
+Game -> Pacman: setState("normal")
+@enduml

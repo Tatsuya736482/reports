@@ -1,0 +1,27 @@
+@startuml
+autoactivate on
+[o-> Timer: n[ms]ごとに起動
+
+== ゲーム画面の表示 ==
+Timer -> Timer: decreaseTime(n)
+GUI -> Game: getInfo()
+Game --> GUI: return info
+GUI -> GUI: drawGamePanel()
+== モンスターの移動 ==
+Timer -> Game: triggerMoveGhost()
+==時間切れの判定==
+alt info.time == 0
+    Timer -> Game: triggerTimeOut()
+else return != 0
+==モンスターとの衝突判定==
+    Game -> Map: isGhost(info.PacX, info.PacY)
+    Map -> Ghosts: isGhost(info.PacX, info.PacY)
+    Ghosts --> Map: return
+    Map --> Game: return
+    alt return == true & state == "normal"
+        Timer -> Game: triggerGhost()
+    else return == true & state == "power"
+        Timer -> Game: triggerEatGhost()
+    end
+end
+@enduml
